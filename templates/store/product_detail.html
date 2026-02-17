@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+
+<!-- Back link -->
+<a href="{% url 'product_list' %}" class="back-link">← Back to Shop</a>
+
+<div class="product-page">
+
+  <!-- Image Section -->
+  <div class="product-media card">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+      <div class="no-image">No image available</div>
+    {% endif %}
+  </div>
+
+  <!-- Details Section -->
+  <div class="product-details">
+
+    <h1 class="product-title">{{ product.name }}</h1>
+
+    <div class="price-row">
+      <span class="price">${{ product.price }}</span>
+      <span class="badge">Luxury Abaya</span>
+    </div>
+
+    {% if product.description %}
+      <p class="product-desc">{{ product.description }}</p>
+    {% else %}
+      <p class="product-desc muted">No description available for this product yet.</p>
+    {% endif %}
+
+    <div class="divider"></div>
+
+    <!-- Add to Cart Form -->
+    <form action="{% url 'add_to_cart' product.id %}" method="POST" class="add-form">
+      {% csrf_token %}
+
+      <div class="qty-group">
+        <label class="label">Quantity</label>
+        <input class="qty-input" type="number" name="quantity" value="1" min="1">
+      </div>
+
+      <button type="submit" class="btn btn-gold add-btn">
+        Add to Cart
+      </button>
+
+      <a href="{% url 'cart_detail' %}" class="btn btn-outline add-btn">
+        View Cart
+      </a>
+    </form>
+
+    <p class="note">
+      ✨ Soft fabric • Elegant finish • Made for feminine luxury.
+    </p>
+
+  </div>
+</div>
+
+<!-- Page-only CSS -->
+<style>
+  .back-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: 0.2s ease;
+  }
+  .back-link:hover{
+    color: var(--primary);
+    transform: translateX(-2px);
+  }
+
+  .product-page{
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 22px;
+    align-items: start;
+  }
+
+  .card{
+    background: rgba(255,255,255,0.75);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .product-media{
+    overflow: hidden;
+    min-height: 520px;
+    display: grid;
+    place-items: center;
+    background: #fff;
+  }
+
+  .product-media img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.25s ease;
+  }
+
+  .product-media:hover img{
+    transform: scale(1.02);
+  }
+
+  .no-image{
+    width: 100%;
+    height: 520px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    background: rgba(17,17,17,0.03);
+    font-size: 14px;
+  }
+
+  .product-details{
+    padding: 6px 2px;
+  }
+
+  .product-title{
+    font-family: "Playfair Display", serif;
+    font-size: 34px;
+    line-height: 1.15;
+    margin: 0 0 12px;
+    color: var(--primary);
+  }
+
+  .price-row{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .price{
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.2px;
+  }
+
+  .badge{
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid rgba(201,162,39,0.35);
+    background: rgba(201,162,39,0.12);
+    color: var(--primary);
+  }
+
+  .product-desc{
+    margin: 0;
+    font-size: 14px;
+    color: rgba(17,17,17,0.78);
+    background: rgba(255,255,255,0.55);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 14px;
+  }
+
+  .muted{
+    color: var(--muted);
+  }
+
+  .divider{
+    height: 1px;
+    background: var(--border);
+    margin: 18px 0;
+  }
+
+  .add-form{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .label{
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .qty-group{
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .qty-input{
+    width: 100%;
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(250,247,242,0.7);
+    outline: none;
+    font-size: 14px;
+    transition: 0.2s ease;
+  }
+
+  .qty-input:focus{
+    border-color: rgba(201,162,39,0.55);
+    box-shadow: 0 0 0 4px rgba(201,162,39,0.18);
+    background: #fff;
+  }
+
+  .add-btn{
+    width: 100%;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  .note{
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px){
+    .product-page{
+      grid-template-columns: 1fr;
+    }
+    .product-media{
+      min-height: 360px;
+    }
+    .no-image{
+      height: 360px;
+    }
+    .product-title{
+      font-size: 28px;
+    }
+  }
+</style>
+
+{% endblock %}

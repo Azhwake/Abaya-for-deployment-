@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Order Successful | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+
+<div class="success-wrap">
+  <div class="success-card">
+
+    <div class="success-icon">✓</div>
+
+    <h1 class="success-title">Order Successful! 🎉</h1>
+    <p class="success-text">
+      Thank you for your purchase. Your order has been placed successfully.
+      <br>
+      We’ll contact you soon for delivery confirmation ✨
+    </p>
+
+    <div class="success-actions">
+      <a href="{% url 'product_list' %}" class="btn btn-outline" style="border-radius:14px;">
+        Continue Shopping
+      </a>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'my_orders' %}" class="btn btn-gold" style="border-radius:14px;">
+          View My Orders
+        </a>
+      {% endif %}
+    </div>
+
+    <p class="success-note">
+      Need help? Contact us anytime 💛
+    </p>
+  </div>
+</div>
+
+<style>
+  .success-wrap{
+    display: grid;
+    place-items: center;
+    padding: 40px 0;
+  }
+
+  .success-card{
+    width: 100%;
+    max-width: 720px;
+    background: rgba(255,255,255,0.78);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 22px;
+    text-align: center;
+  }
+
+  .success-icon{
+    width: 72px;
+    height: 72px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 14px;
+    font-size: 34px;
+    font-weight: 900;
+    color: var(--accent);
+    border: 2px solid rgba(201,162,39,0.45);
+    background: rgba(201,162,39,0.08);
+  }
+
+  .success-title{
+    margin: 0 0 10px;
+    font-family: "Playfair Display", serif;
+    color: var(--primary);
+    font-size: 30px;
+    letter-spacing: 0.2px;
+  }
+
+  .success-text{
+    margin: 0 auto 18px;
+    max-width: 520px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .success-actions{
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .success-note{
+    margin: 16px 0 0;
+    font-size: 13px;
+    color: rgba(17,17,17,0.55);
+  }
+</style>
+
+{% endblock %}

@@ -1,0 +1,272 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Ashwaq's Abaya Brand{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #111111;
+      --accent: #C9A227;
+      --bg: #FAF7F2;
+      --text: #222;
+      --muted: rgba(17, 17, 17, 0.65);
+      --card: #ffffff;
+      --border: rgba(17, 17, 17, 0.12);
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --container: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    /* NAVBAR */
+    header.navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(250, 247, 242, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ✅ LOGO SIZE */
+    .brand img {
+      height: 60px;
+      width: auto;
+      display: block;
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-title strong {
+      font-family: "Playfair Display", serif;
+      font-size: 18px;
+    }
+
+    .brand-title small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    nav.nav-links {
+      display: flex;
+      gap: 12px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .nav-link {
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-link:hover {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #C9A227, #F0D782);
+      border: none;
+    }
+
+    .mini-cart {
+      position: relative;
+    }
+
+    .cart-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.75);
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--primary);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 12px;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--bg);
+    }
+
+    main.page {
+      min-height: calc(100vh - 260px);
+      padding: 34px 0 70px;
+    }
+
+    /* FOOTER */
+    footer.footer {
+      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.35);
+      padding: 44px 0 28px;
+    }
+
+    .footer-brand img {
+      height: 70px;
+      margin-bottom: 10px;
+    }
+
+    .footer-bottom {
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container">
+      <div class="nav-inner">
+
+        <!-- ✅ LOGO INSERTED -->
+        <a class="brand" href="{% url 'product_list' %}">
+          <img src="{% static 'media/Ashwaq-logo.png' %}" alt="Ashwaq Logo">
+          <div class="brand-title">
+            <strong>Ashwaq’s Abaya</strong>
+            <small>Elegant • Soft • Luxury</small>
+          </div>
+        </a>
+
+        <nav class="nav-links">
+          <a class="nav-link" href="{% url 'product_list' %}">Home</a>
+          <a class="nav-link" href="{% url 'about' %}">About Us</a>
+          <!-- <a class="nav-link" href="{% url 'blog_list' %}">News</a> -->
+          <a class="nav-link" href="{% url 'blog_list' %}">Blog</a>
+          <a class="nav-link" href="{% url 'contact' %}">Contact Us</a> 
+        </nav>
+
+        <div class="nav-right">
+
+          <div class="mini-cart">
+            <button class="cart-btn">🛒</button>
+            <div class="cart-count">{{ cart_count|default:"0" }}</div>
+          </div>
+
+          {% if user.is_authenticated %}
+          {% else %}
+          <a class="btn" href="{% url 'login' %}">Login</a>
+          <a class="btn btn-gold" href="{% url 'signup' %}">Sign Up</a>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">
+
+        <!-- ✅ FOOTER LOGO -->
+        <img src="{% static 'media/Ashwaq-logo.png' %}" alt="Ashwaq Logo">
+        <p>Crafted with elegance and softness — Ashwaq’s Abaya Brand brings feminine luxury to everyday modest wear.</p>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Ashwaq’s Abaya Brand</div>
+        <div>Built with Django ✨</div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Your Cart</h1>
+
+{% if order %}
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+    {% for item in order.items.all %}
+    <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ item.price|floatformat:2 }}</td>
+        <td>
+            <a href="{% url 'update_cart' item.product.id 'increase' %}" class="bg-green-500 text-white px-2 py-1 rounded">+</a>
+            <a href="{% url 'update_cart' item.product.id 'decrease' %}" class="bg-red-500 text-white px-2 py-1 rounded">-</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'checkout' %}" class="bg-blue-500 text-white px-4 py-2 rounded">Checkout</a>
+
+{% else %}
+<p>Your cart is empty.</p>
+<a href="{% url 'product_list' %}">Go Shopping</a>
+{% endif %}
+{% endblock %}

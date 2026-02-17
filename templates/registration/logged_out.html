@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Logged Out | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1 class="auth-title">You’ve been logged out 👋</h1>
+    <p class="auth-text">Thanks for visiting Ashwaq’s Abaya. See you again soon!</p>
+    <a href="{% url 'login' %}" class="btn btn-gold">Login Again</a>
+    <a href="{% url 'product_list' %}" class="btn btn-outline" style="margin-left:10px;">Continue Shopping</a>
+  </div>
+</div>
+
+<style>
+.auth-text{
+  margin: 14px 0 18px;
+  font-size:14px;
+  color: var(--muted);
+}
+.btn-outline{
+  padding: 12px;
+  border:1px solid var(--accent);
+  color: var(--accent);
+  border-radius:12px;
+  background: transparent;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-outline:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+</style>
+
+{% endblock %}

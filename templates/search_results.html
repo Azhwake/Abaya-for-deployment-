@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Search | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+<section>
+  <div style="max-width:900px;margin:0 auto 18px;">
+    <h1 style="font-family:'Playfair Display',serif;margin:0 0 10px;">Search</h1>
+    <p style="color:var(--muted);margin:0;">
+      {% if query %}
+        Results for: <strong>"{{ query }}"</strong>
+      {% else %}
+        Type something to search abayas ✨
+      {% endif %}
+    </p>
+  </div>
+
+  <form method="GET" action="{% url 'search' %}" style="max-width:900px;margin:0 auto 22px;">
+    <div style="display:flex;gap:10px;">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search abayas..."
+        style="flex:1;padding:12px 14px;border-radius:999px;border:1px solid var(--border);outline:none;background:#fff;">
+      <button class="btn btn-gold" type="submit">Search</button>
+    </div>
+  </form>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;">
+    {% for product in results %}
+    <div class="card" style="padding:16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);">
+      <div style="height:180px;border-radius:14px;background:rgba(17,17,17,0.06);overflow:hidden;">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%;height:100%;object-fit:cover;">
+        {% endif %}
+      </div>
+
+      <h3 style="margin:12px 0 6px;font-size:16px;">{{ product.name }}</h3>
+      <p style="margin:0 0 12px;color:var(--muted);font-size:14px;">
+        ${{ product.price }}
+      </p>
+
+      <div style="display:flex;gap:10px;">
+        <a class="btn btn-gold" style="flex:1;" href="{% url 'product_detail' product.slug %}">View</a>
+        {% if user.is_authenticated %}
+        <a class="btn btn-outline" style="flex:1;" href="{% url 'wishlist_toggle' product.id %}">♡ Wishlist</a>
+        {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    {% if query %}
+    <div style="grid-column:1/-1;">
+      <div class="card" style="padding:22px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);">
+        <p style="margin:0;color:var(--muted);">No products found for "{{ query }}"</p>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+  <style>
+    @media (max-width: 900px) {
+      section > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</section>
+{% endblock %}

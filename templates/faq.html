@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+<section style="max-width:900px;margin:0 auto;">
+  <h1 style="font-family:'Playfair Display',serif;margin:0 0 10px;">Frequently Asked Questions</h1>
+  <p style="color:var(--muted);margin:0 0 22px;">
+    Quick answers about shipping, sizes, fabric and orders.
+  </p>
+
+  <div class="card" style="padding:18px;border-radius:var(--radius);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);">
+    <details style="padding:14px;border-bottom:1px solid rgba(17,17,17,0.08);" open>
+      <summary style="cursor:pointer;font-weight:700;">Do you ship internationally?</summary>
+      <p style="color:var(--muted);margin:10px 0 0;">
+        Yes ✨ We ship internationally. Delivery time depends on your location.
+      </p>
+    </details>
+
+    <details style="padding:14px;border-bottom:1px solid rgba(17,17,17,0.08);">
+      <summary style="cursor:pointer;font-weight:700;">How do I choose my size?</summary>
+      <p style="color:var(--muted);margin:10px 0 0;">
+        Check the product description and size notes. If unsure, message us from the Contact page.
+      </p>
+    </details>
+
+    <details style="padding:14px;border-bottom:1px solid rgba(17,17,17,0.08);">
+      <summary style="cursor:pointer;font-weight:700;">Can I return an abaya?</summary>
+      <p style="color:var(--muted);margin:10px 0 0;">
+        Yes — please read our Returns & Policy page for full details.
+      </p>
+    </details>
+
+    <details style="padding:14px;">
+      <summary style="cursor:pointer;font-weight:700;">How can I contact support?</summary>
+      <p style="color:var(--muted);margin:10px 0 0;">
+        Use the Contact page and we’ll reply as soon as possible 💛
+      </p>
+    </details>
+  </div>
+</section>
+{% endblock %}

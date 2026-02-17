@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+
+<div style="margin-bottom: 18px;">
+  <h1 class="page-title">Checkout</h1>
+  <p class="page-subtitle">Almost there — complete your order ✨</p>
+</div>
+
+{% if cart %}
+
+<div class="checkout-layout">
+
+  <!-- Checkout Form -->
+  <div class="card checkout-form">
+    <h3 class="section-title">Customer Details</h3>
+
+    <form method="post" class="form">
+      {% csrf_token %}
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="full_name">Full Name</label>
+          <input type="text" name="full_name" id="full_name" placeholder="Your full name" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" placeholder="example@gmail.com" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="phone_number">Phone Number</label>
+          <input type="text" name="phone_number" id="phone_number" placeholder="+252 ..." required>
+        </div>
+
+        <div class="field">
+          <label for="city">City</label>
+          <input type="text" name="city" id="city" placeholder="Hargeisa, Burco..." required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="address">Address</label>
+        <textarea name="address" id="address" rows="4" placeholder="Street, district, landmark..." required></textarea>
+      </div>
+
+      <div class="form-actions">
+        <a href="{% url 'cart_detail' %}" class="btn btn-outline" style="border-radius:14px;">
+          ← Back to cart
+        </a>
+
+        <button type="submit" class="btn btn-gold" style="border-radius:14px;">
+          Place Order
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Order Summary -->
+  <aside class="card summary">
+    <h3 class="section-title">Order Summary</h3>
+
+    <div class="summary-items">
+      {% for item in cart %}
+        <div class="summary-item">
+          <div class="summary-left">
+            <div class="summary-name">{{ item.product.name }}</div>
+            <div class="summary-meta">{{ item.quantity }} × ${{ item.product.price }}</div>
+          </div>
+          <div class="summary-right">
+            ${{ item.subtotal }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="summary-total-row">
+      <span>Total</span>
+      <span class="summary-total">${{ total_price }}</span>
+    </div>
+
+    <p class="summary-note">
+      ✨ Your order will be processed securely and confirmed instantly.
+    </p>
+  </aside>
+
+</div>
+
+{% else %}
+  <div class="empty-state">
+    <h3 style="margin:0 0 8px; font-family:'Playfair Display', serif;">Your cart is empty 😭</h3>
+    <p style="margin:0; color: var(--muted);">
+      Add products before you checkout.
+    </p>
+
+    <div style="margin-top:14px;">
+      <a href="{% url 'product_list' %}" class="btn btn-gold" style="border-radius:14px;">
+        Start Shopping
+      </a>
+    </div>
+  </div>
+{% endif %}
+
+<!-- Page-only CSS -->
+<style>
+  .checkout-layout{
+    display: grid;
+    grid-template-columns: 1.6fr 0.9fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .card{
+    background: rgba(255,255,255,0.75);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .checkout-form{
+    padding: 16px;
+  }
+
+  .section-title{
+    margin: 0 0 14px;
+    font-family: "Playfair Display", serif;
+    font-size: 20px;
+    color: var(--primary);
+  }
+
+  .form{
+    display: grid;
+    gap: 14px;
+  }
+
+  .grid-2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .field{
+    display: grid;
+    gap: 6px;
+  }
+
+  label{
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(17,17,17,0.7);
+    letter-spacing: 0.2px;
+  }
+
+  input, textarea{
+    width: 100%;
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    outline: none;
+    font-size: 14px;
+    background: rgba(255,255,255,0.85);
+    transition: 0.2s ease;
+  }
+
+  input:focus, textarea:focus{
+    border-color: rgba(201,162,39,0.55);
+    box-shadow: 0 0 0 4px rgba(201,162,39,0.12);
+  }
+
+  .form-actions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .summary{
+    padding: 16px;
+    position: sticky;
+    top: 90px;
+  }
+
+  .summary-items{
+    display: grid;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .summary-item{
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .summary-name{
+    font-weight: 900;
+    font-size: 14px;
+    color: var(--primary);
+  }
+
+  .summary-meta{
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .summary-right{
+    font-weight: 900;
+    color: var(--accent);
+  }
+
+  .summary-total-row{
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 800;
+  }
+
+  .summary-total{
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--accent);
+  }
+
+  .summary-note{
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .empty-state{
+    padding: 26px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.7);
+    box-shadow: var(--shadow);
+    text-align: center;
+    margin-top: 22px;
+  }
+
+  @media (max-width: 950px){
+    .checkout-layout{
+      grid-template-columns: 1fr;
+    }
+    .summary{
+      position: static;
+    }
+  }
+
+  @media (max-width: 520px){
+    .grid-2{
+      grid-template-columns: 1fr;
+    }
+    .form-actions{
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
+
+{% endblock %}

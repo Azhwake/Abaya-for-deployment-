@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}Blog | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div style="margin-bottom: 18px;">
+  <h1 class="page-title">Blog</h1>
+  <p class="page-subtitle">
+    Style notes, abaya care tips, and luxury inspiration ✨
+  </p>
+</div>
+
+<!-- Search bar -->
+<div class="blog-search">
+  <form method="GET" class="blog-search-form">
+    <input
+      type="text"
+      name="q"
+      class="input"
+      placeholder="Search blog posts..."
+      value="{{ request.GET.q }}"
+    >
+    <button class="btn btn-gold" style="border-radius: 14px;" type="submit">
+      Search
+    </button>
+
+    {% if request.GET.q %}
+      <a href="{% url 'blog_list' %}" class="btn btn-outline" style="border-radius: 14px;">
+        Reset
+      </a>
+    {% endif %}
+  </form>
+</div>
+
+{% if page_obj %}
+  <!-- Blog Grid -->
+  <div class="blog-grid">
+    {% for post in page_obj %}
+      <a href="{% url 'blog_detail' slug=post.slug %}" class="blog-card">
+        <div class="blog-cover">
+          {% if post.cover_image %}
+            <img src="{{ post.cover_image.url }}" alt="{{ post.title }}">
+          {% else %}
+            <div class="image-placeholder">No image</div>
+          {% endif %}
+        </div>
+
+        <div class="blog-body">
+          <div class="meta">
+            <span class="tag">Ashwaq’s Notes</span>
+            <span class="date">{{ post.created_at|date:"M d, Y" }}</span>
+          </div>
+
+          <h3 class="blog-title">{{ post.title }}</h3>
+
+          <p class="blog-excerpt">
+            {% if post.excerpt %}
+              {{ post.excerpt|truncatechars:130 }}
+            {% else %}
+              {{ post.content|striptags|truncatechars:130 }}
+            {% endif %}
+          </p>
+
+          <div class="readmore">
+            Read more →
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+      <a class="page-btn" href="?page={{ page_obj.previous_page_number }}&q={{ request.GET.q }}">
+        ← Previous
+      </a>
+    {% else %}
+      <span class="page-btn disabled">← Previous</span>
+    {% endif %}
+
+    <span class="page-status">
+      Page <strong>{{ page_obj.number }}</strong> of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+      <a class="page-btn" href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q }}">
+        Next →
+      </a>
+    {% else %}
+      <span class="page-btn disabled">Next →</span>
+    {% endif %}
+  </div>
+
+{% else %}
+  <div class="empty-state">
+    <h3 style="margin:0 0 8px; font-family: 'Playfair Display', serif;">No blog posts yet 😭</h3>
+    <p style="margin:0; color: var(--muted);">
+      Once you add blog posts in admin, they’ll appear here.
+    </p>
+  </div>
+{% endif %}
+
+<!-- Page-only CSS -->
+<style>
+  .blog-search{
+    background: rgba(255,255,255,0.65);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin-bottom: 22px;
+  }
+
+  .blog-search-form{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .input{
+    flex: 1;
+    min-width: 240px;
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(250,247,242,0.7);
+    outline: none;
+    font-size: 14px;
+    transition: 0.2s ease;
+  }
+
+  .input:focus{
+    border-color: rgba(201,162,39,0.55);
+    box-shadow: 0 0 0 4px rgba(201,162,39,0.18);
+    background: #fff;
+  }
+
+  .blog-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .blog-card{
+    display: flex;
+    flex-direction: column;
+    background: rgba(255,255,255,0.75);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: 0.22s ease;
+    min-height: 420px;
+  }
+
+  .blog-card:hover{
+    transform: translateY(-4px);
+    border-color: rgba(201,162,39,0.35);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.10);
+  }
+
+  .blog-cover{
+    height: 210px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .blog-cover img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.25s ease;
+  }
+
+  .blog-card:hover .blog-cover img{
+    transform: scale(1.03);
+  }
+
+  .image-placeholder{
+    width: 100%;
+    height: 210px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    font-size: 13px;
+    background: rgba(17,17,17,0.03);
+  }
+
+  .blog-body{
+    padding: 14px 14px 16px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .meta{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .tag{
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid rgba(201,162,39,0.35);
+    background: rgba(201,162,39,0.12);
+    color: var(--primary);
+  }
+
+  .date{
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .blog-title{
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .blog-excerpt{
+    margin: 0;
+    font-size: 13.5px;
+    color: rgba(17,17,17,0.78);
+    line-height: 1.6;
+  }
+
+  .readmore{
+    margin-top: 4px;
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 13px;
+  }
+
+  .pagination{
+    margin-top: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .page-btn{
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.75);
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.2s ease;
+  }
+
+  .page-btn:hover{
+    border-color: rgba(201,162,39,0.35);
+    transform: translateY(-1px);
+  }
+
+  .page-btn.disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .page-status{
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .empty-state{
+    padding: 26px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.7);
+    box-shadow: var(--shadow);
+    text-align: center;
+    margin-top: 22px;
+  }
+
+  @media (max-width: 1100px){
+    .blog-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 650px){
+    .blog-grid{ grid-template-columns: 1fr; }
+  }
+</style>
+
+{% endblock %}
+

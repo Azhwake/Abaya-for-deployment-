@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders | Ashwaq’s Abaya{% endblock %}
+
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <h1 class="page-title">My Orders</h1>
+    <p class="page-subtitle">Track your purchases and order history ✨</p>
+  </div>
+</div>
+
+{% if orders %}
+  <div class="orders-grid">
+    {% for order in orders %}
+      <div class="order-card">
+
+        <div class="order-top">
+          <div>
+            <div class="order-id">Order #{{ order.id }}</div>
+            <div class="order-date">
+              {{ order.created_at|date:"M d, Y - h:i A" }}
+            </div>
+          </div>
+
+          <!-- Dynamic Status Badge -->
+          {% if order.status %}
+            <span class="badge 
+              {% if order.status == 'Pending' %}badge-pending
+              {% elif order.status == 'Shipped' %}badge-shipped
+              {% elif order.status == 'Delivered' %}badge-delivered
+              {% endif %}">
+              {{ order.status }}
+            </span>
+          {% else %}
+            <span class="badge badge-soft">Processing</span>
+          {% endif %}
+        </div>
+
+        <div class="order-items">
+          <div class="items-title">Items</div>
+
+          <ul class="items-list">
+            {% for item in order.items.all %}
+              <li class="item-row">
+                <span class="item-name">{{ item.product.name }}</span>
+                <span class="item-meta">{{ item.quantity }} × ${{ item.price }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="order-bottom">
+          <span class="muted">Total</span>
+          <span class="order-total">${{ order.get_total_price }}</span>
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
+
+{% else %}
+  <div class="empty-state">
+    <h3 class="empty-title">No orders yet 🤍</h3>
+    <p class="empty-text">
+      When you place an order, it will appear here.
+    </p>
+    <a href="{% url 'product_list' %}" class="btn btn-gold" style="border-radius:14px;">
+      Start Shopping
+    </a>
+  </div>
+{% endif %}
+
+<style>
+  .page-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .orders-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .order-card{
+    background: rgba(255,255,255,0.78);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .order-top{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .order-id{
+    font-weight: 950;
+    color: var(--primary);
+    font-size: 16px;
+  }
+
+  .order-date{
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Badges */
+  .badge{
+    font-size: 12px;
+    font-weight: 900;
+    padding: 7px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .badge-pending{
+    border: 1px solid rgba(201,162,39,0.35);
+    background: rgba(201,162,39,0.1);
+    color: var(--accent);
+  }
+
+  .badge-shipped{
+    border: 1px solid rgba(107,91,149,0.35);
+    background: rgba(107,91,149,0.1);
+    color: #6B5B95;
+  }
+
+  .badge-delivered{
+    border: 1px solid rgba(40,167,69,0.35);
+    background: rgba(40,167,69,0.1);
+    color: #28A745;
+  }
+
+  .badge-soft{
+    border-color: rgba(17,17,17,0.12);
+    background: rgba(17,17,17,0.04);
+    color: rgba(17,17,17,0.7);
+  }
+
+  .items-title{
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.2px;
+    color: rgba(17,17,17,0.7);
+    margin-bottom: 8px;
+  }
+
+  .items-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .item-row{
+    display:flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(250,247,242,0.55);
+  }
+
+  .item-name{
+    font-weight: 900;
+    color: var(--primary);
+    font-size: 13px;
+  }
+
+  .item-meta{
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 800;
+  }
+
+  .order-bottom{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .muted{
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .order-total{
+    font-size: 18px;
+    font-weight: 950;
+    color: var(--accent);
+  }
+
+  .empty-state{
+    padding: 28px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.75);
+    box-shadow: var(--shadow);
+    text-align: center;
+    margin-top: 18px;
+  }
+
+  .empty-title{
+    margin: 0 0 8px;
+    font-family: "Playfair Display", serif;
+    color: var(--primary);
+  }
+
+  .empty-text{
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 900px){
+    .orders-grid{
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% endblock %}

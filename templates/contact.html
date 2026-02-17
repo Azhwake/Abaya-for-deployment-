@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Ashwaq's Abaya Brand{% endblock %}
+
+{% block content %}
+<style>
+/* ===== Contact Form Styles ===== */
+form.contact-form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff8f2; /* soft warm background */
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  font-family: 'Poppins', sans-serif;
+}
+
+form.contact-form h1 {
+  text-align: center;
+  color: #b37b49; /* gold accent */
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+form.contact-form p {
+  text-align: center;
+  color: #555;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
+
+form.contact-form label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+form.contact-form input,
+form.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0d6cd;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+form.contact-form input:focus,
+form.contact-form textarea:focus {
+  border-color: #b37b49; /* gold focus */
+  box-shadow: 0 0 8px rgba(179, 123, 73, 0.3);
+  outline: none;
+}
+
+form.contact-form button.btn-gold {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #b37b49, #d4a373);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+form.contact-form button.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(179, 123, 73, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  form.contact-form {
+    padding: 1.5rem;
+  }
+  form.contact-form h1 {
+    font-size: 1.8rem;
+  }
+  form.contact-form button.btn-gold {
+    font-size: 1rem;
+  }
+}
+</style>
+
+<h1>Contact Us</h1>
+<p>Have questions? We’re here to help!</p>
+
+<form method="post" class="contact-form">
+  {% csrf_token %}
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="Your full name" required>
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+  </div>
+  <div>
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+  </div>
+  <button type="submit" class="btn-gold">Send Message</button>
+</form>
+{% endblock %}

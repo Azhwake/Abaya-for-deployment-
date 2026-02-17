@@ -1,0 +1,192 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% block title %}Dashboard | Ashwaq’s Abaya{% endblock %}
+{% block page_title %}Overview{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(201,162,39,0.1); color: var(--accent);">📦</div>
+        <div class="stat-content">
+            <h3>Total Orders</h3>
+            <p class="stat-value">{{ total_orders }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71;">💰</div>
+        <div class="stat-content">
+            <h3>Total Sales</h3>
+            <p class="stat-value">${{ total_sales|floatformat:2 }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(52, 152, 219, 0.1); color: #3498db;">📅</div>
+        <div class="stat-content">
+            <h3>Orders Today</h3>
+            <p class="stat-value">{{ orders_today }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-header">
+    <h3>🔥 Top Selling Products</h3>
+</div>
+
+<div class="table-container">
+    {% if top_products %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th style="text-align: right;">Units Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in top_products %}
+            <tr>
+                <td>
+                    <div class="product-cell">
+                        <div class="product-icon">A</div>
+                        {{ p.product__name }}
+                    </div>
+                </td>
+                <td style="text-align: right; font-weight: 600;">{{ p.total_sold }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No sales data available yet.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* STATS GRID */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 48px;
+    }
+
+    .stat-card {
+        background: var(--card);
+        padding: 24px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: transform 0.2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 24px;
+    }
+
+    .stat-content h3 {
+        margin: 0 0 4px;
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 500;
+    }
+
+    .stat-value {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    /* SECTION HEADERS */
+    .section-header {
+        margin-bottom: 20px;
+    }
+
+    .section-header h3 {
+        font-family: var(--font-display);
+        font-size: 20px;
+        margin: 0;
+        color: var(--primary);
+    }
+
+    /* TABLE STYLES */
+    .table-container {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        overflow: hidden;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 16px 24px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .data-table th {
+        background: rgba(0, 0, 0, 0.02);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .data-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+        background: rgba(0, 0, 0, 0.01);
+    }
+
+    .product-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+    }
+
+    .product-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--bg);
+        border-radius: 6px;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .empty-state {
+        padding: 40px;
+        text-align: center;
+        color: var(--muted);
+    }
+</style>
+
+{% endblock %}

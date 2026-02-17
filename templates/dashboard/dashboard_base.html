@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Ashwaq's Abaya Brand{% endblock %}
+
+{% block content %}
+<style>
+/* ----- Layout ----- */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f5f5;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ----- Sidebar ----- */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #1e1e2f 0%, #2c2c44 100%);
+    color: #fff;
+    padding: 30px 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+    border-radius: 0 20px 20px 0;
+}
+
+.sidebar h2 {
+    font-size: 26px;
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav {
+    width: 100%;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-decoration: none;
+    margin: 15px 0;
+    padding: 12px 18px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.sidebar-nav a:hover {
+    background: #ffce00;
+    color: #1e1e2f;
+    transform: translateX(5px);
+}
+
+.sidebar-nav .icon {
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+/* ----- Main Content ----- */
+.main-content {
+    flex: 1;
+    padding: 40px;
+}
+
+/* ----- Cards ----- */
+.dashboard-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.card {
+    flex: 1 1 220px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.card h2 {
+    font-size: 26px;
+    margin: 12px 0;
+}
+
+.card p {
+    color: #666;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ----- Chart Containers ----- */
+.chart-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ----- Table ----- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: left;
+}
+
+th {
+    background: #f3f3f3;
+    color: #333;
+}
+
+tr:nth-child(even) {
+    background: #fafafa;
+}
+
+</style>
+
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Ashwaq's Abaya</h2>
+      <nav class="sidebar-nav">
+    <a href="{% url 'product_list' %}"><span class="icon">📦</span> Products</a>
+    <a href="{% url 'my_orders' %}"><span class="icon">🛒</span> Orders</a>
+    <a href="{% url 'cart_detail' %}"><span class="icon">🛍️</span> Cart</a>
+    <a href="{% url 'my_orders' %}"><span class="icon">📜</span> My Orders</a>
+    <a href="{% url 'profile' %}"><span class="icon">👤</span> Profile</a>
+    <a href="{% url 'contact' %}"><span class="icon">✉️</span> Contact</a>
+    <a href="{% url 'settings' %}"><span class="icon">⚙️</span> Settings</a>
+</nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Dashboard Overview</h1>
+
+        <!-- Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <h2>{{ total_products }}</h2>
+                <p>Total Products</p>
+            </div>
+            <div class="card">
+                <h2>{{ total_orders }}</h2>
+                <p>Total Orders</p>
+            </div>
+            <div class="card">
+                <h2>${{ total_revenue }}</h2>
+                <p>Total Revenue</p>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="chart-container">
+            <h3>Orders Over Time</h3>
+            <canvas id="ordersLineChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Products by Category</h3>
+            <canvas id="categoriesPieChart"></canvas>
+        </div>
+
+        <!-- Recent Orders Table -->
+        <div class="chart-container">
+            <h3>Recent Orders</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.user.username }}</td>
+                        <td>${{ order.get_total }}</td>
+                        <td>{{ order.ordered|yesno:"Completed,Pending" }}</td>
+                        <td>{{ order.created_at|date:"M d, Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ordersData = {{ orders_over_time|safe }};
+const categoriesData = {{ categories_count|safe }};
+
+// Orders Line Chart
+const ctx1 = document.getElementById('ordersLineChart').getContext('2d');
+new Chart(ctx1, {
+    type: 'line',
+    data: {
+        labels: ordersData.labels,
+        datasets: [{
+            label: 'Orders',
+            data: ordersData.values,
+            backgroundColor: 'rgba(255, 215, 0, 0.2)',
+            borderColor: 'rgba(255, 215, 0, 1)',
+            borderWidth: 2,
+            tension: 0.3
+        }]
+    },
+    options: { responsive: true }
+});
+
+// Categories Pie Chart
+const ctx2 = document.getElementById('categoriesPieChart').getContext('2d');
+new Chart(ctx2, {
+    type: 'pie',
+    data: {
+        labels: categoriesData.labels,
+        datasets: [{
+            label: 'Products by Category',
+            data: categoriesData.values,
+            backgroundColor: [
+                '#FFD700', '#FF8C00', '#FF69B4', '#8A2BE2', '#00CED1', '#3CB371'
+            ]
+        }]
+    },
+    options: { responsive: true }
+});
+</script>
+{% endblock %}
