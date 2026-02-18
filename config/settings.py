@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
 import os
 import dj_database_url
 
@@ -24,11 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+from decouple import config
 SECRET_KEY = config('django-insecure-m)qa2c%u36$rq0an8t3r)qf)3+h^t&o*(!g4r^%x$u8su7qmav')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS =  ["abaya-store-brod.onrender.com"]
+ALLOWED_HOSTS = ["abaya-store-brod.onrender.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
