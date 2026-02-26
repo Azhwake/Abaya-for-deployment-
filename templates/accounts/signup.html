@@ -1,23 +1,102 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Sign Up</h2>
+<style>
+  .signup-container {
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
 
-{% if messages %}
+  .signup-container h2 {
+    margin-bottom: 25px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .signup-container input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    transition: 0.3s;
+  }
+
+  .signup-container input:focus {
+    border-color: #c9a646;
+    outline: none;
+    box-shadow: 0 0 6px rgba(201, 166, 70, 0.3);
+  }
+
+  .signup-container button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #c9a646, #e8d18f);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .signup-container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+
+  .signup-container p {
+    margin-top: 18px;
+    font-size: 14px;
+  }
+
+  .signup-container a {
+    color: #c9a646;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .signup-container a:hover {
+    text-decoration: underline;
+  }
+
+  .error-message {
+    color: #e74c3c;
+    margin-bottom: 15px;
+  }
+</style>
+
+<div class="signup-container">
+
+  <h2>Create Your Account</h2>
+
+  {% if messages %}
   {% for message in messages %}
-    <p style="color:red;">{{ message }}</p>
+  <p class="error-message">{{ message }}</p>
   {% endfor %}
-{% endif %}
+  {% endif %}
 
-<form method="POST">
-  {% csrf_token %}
-  <input type="text" name="username" placeholder="Username" required><br><br>
-  <input type="email" name="email" placeholder="Email" required><br><br>
-  <input type="password" name="password1" placeholder="Password" required><br><br>
-  <input type="password" name="password2" placeholder="Confirm Password" required><br><br>
-  <button type="submit">Create Account</button>
-</form>
+  <form method="POST">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="email" name="email" placeholder="Email address" required>
+    <input type="password" name="password1" placeholder="Password" required>
+    <input type="password" name="password2" placeholder="Confirm Password" required>
+    <button type="submit">Create Account</button>
+  </form>
 
-<p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+  <p>
+    Already have an account?
+    <a href="{% url 'login' %}">Login</a>
+  </p>
+
+</div>
 
 {% endblock %}
